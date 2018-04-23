@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  
+  publish:
+    image: jadyoung/publish-file-to-rabbit:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AMQP_HOST: rabbit
+    networks:
+      default:
+        aliases:
+          - publish
+    depends_on:
+      - rabbit
+  rabbit:
+    restart: always
+    image: 'rabbitmq:3.7.4-management'
+    ports:
+      - "15672:15672"
+    networks:
+      default:
+          aliases:
+            - rabbit
+  
