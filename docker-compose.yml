@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-  
   publish:
     image: jadyoung/publish-file-to-rabbit:latest
     build:
@@ -9,7 +8,6 @@ services:
       dockerfile: Dockerfile
     environment:
       AMQP_HOST: rabbit
-      EVENTS_FILE: data/events.json
     networks:
       default:
         aliases:
