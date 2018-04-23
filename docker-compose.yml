@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     environment:
       AMQP_HOST: rabbit
+      EVENTS_FILE: data/events.json
     networks:
       default:
         aliases:
