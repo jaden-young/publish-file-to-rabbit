@@ -7,7 +7,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /go/src/github.com/jaden-young/publish-file-to-rabbit/app .
-COPY events.json events.json
+COPY events.json data/events.json
 COPY wait-for wait-for
 ENV AMQP_HOST localhost
 ENV AMQP_PORT 5672
