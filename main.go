@@ -86,7 +86,8 @@ func main() {
 			return errors.New("Error reading events file")
 		}
 
-		for i, event := range events {
+		log.Print("Sending events...")
+		for _, event := range events {
 			b, err := json.MarshalIndent(event, "", "  ")
 			if err != nil {
 				return err
@@ -100,7 +101,6 @@ func main() {
 					ContentType: "application/json",
 					Body:        b,
 				})
-			log.Printf("Sent event #%d", i)
 		}
 		return nil
 	}
@@ -109,5 +109,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
