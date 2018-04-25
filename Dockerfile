@@ -9,7 +9,7 @@ WORKDIR /root/
 COPY --from=builder /go/src/github.com/jaden-young/publish-file-to-rabbit/app .
 COPY data/events.json data/events.json
 COPY wait-for wait-for
-ENV AMQP_HOST localhost
-ENV AMQP_PORT 5672
+ENV RABBIT_HOST localhost
+ENV RABBIT_HOST 5672
 ENV EVENTS_FILE data/events.json
-CMD ["/bin/sh", "-c", "./wait-for ${AMQP_HOST}:${AMQP_PORT} -- ./app"]
+CMD ["./app"]

@@ -18,34 +18,49 @@ func main() {
 		cli.StringFlag{
 			Name:   "host",
 			Value:  "localhost",
-			EnvVar: "AMQP_HOST",
+			EnvVar: "RABBIT_HOST",
+			Usage:  "hostname of rabbitmq broker",
 		},
 		cli.IntFlag{
 			Name:   "port",
 			Value:  5672,
-			EnvVar: "AMQP_PORT",
+			EnvVar: "RABBIT_PORT",
+			Usage:  "port of rabbitmq broker",
 		},
 		cli.StringFlag{
 			Name:   "user",
 			Value:  "guest",
-			EnvVar: "AMQP_USER",
+			EnvVar: "RABBIT_USER",
+			Usage:  "username for rabbitmq broker",
 		},
 		cli.StringFlag{
 			Name:   "password",
 			Value:  "guest",
-			EnvVar: "AMQP_PASSWORD",
+			EnvVar: "RABBIT_PASSWORD",
+			Usage:  "password for rabbitmq broker",
 		},
 		cli.StringFlag{
 			Name:   "queue",
 			Value:  "eiffel",
 			EnvVar: "QUEUE_NAME",
+			Usage:  "name of rabbit queue",
 		},
 		cli.StringFlag{
 			Name:   "file",
 			Value:  "events.json",
 			EnvVar: "EVENTS_FILE",
+			Usage:  "file to publish. MUST be a single JSON array of objects.",
+		},
+		cli.IntFlag{
+			Name:   "limit",
+			Value:  1000,
+			EnvVar: "EVENTS_LIMIT",
+			Usage:  "maximum number of objects to read from `FILE` and send over RabbitMQ",
 		},
 	}
+	app.Usage = ""
+	app.Description = "Reads a file with a single array of JSON objects and publishes each object as a message to a RabbitMQ queue"
+	app.Version = "0.0.2"
 	app.Action = func(c *cli.Context) error {
 		uri := &amqp.URI{
 			Host:     c.String("host"),
@@ -86,8 +101,12 @@ func main() {
 			return errors.New("Error reading events file")
 		}
 
+		limit := c.Int("limit")
 		log.Print("Sending events...")
-		for _, event := range events {
+		for i, event := range events {
+			if i > limit {
+				break
+			}
 			b, err := json.MarshalIndent(event, "", "  ")
 			if err != nil {
 				return err
