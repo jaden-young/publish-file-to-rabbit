@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/cenkalti/backoff"
 	"github.com/streadway/amqp"
 	"github.com/urfave/cli"
 )
@@ -70,10 +71,19 @@ func main() {
 			Scheme:   "amqp",
 			Vhost:    "/",
 		}
-		log.Println(uri.String())
-		conn, err := amqp.Dial(uri.String())
+
+		var conn *amqp.Connection
+		err := backoff.Retry(func() error {
+			log.Printf("Dialing %s", uri.String())
+			c, err := amqp.Dial(uri.String())
+			if err != nil {
+				return err
+			}
+			conn = c
+			return nil
+		}, backoff.NewExponentialBackOff())
 		if err != nil {
-			return err
+			log.Fatalf("Unable to connect to %s", uri.String())
 		}
 		defer conn.Close()
 

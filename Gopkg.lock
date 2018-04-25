@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/cenkalti/backoff"
+  packages = ["."]
+  revision = "2ea60e5f094469f9e65adb9cd103795b73ae743e"
+  version = "v2.0.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/streadway/amqp"
   packages = ["."]
@@ -13,9 +19,15 @@
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
   version = "v1.20.0"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "81eaf203292d19d1bf4a8ab70f0fe7a2ed3a021141f011b2bd5c879b3b6b477f"
+  inputs-digest = "e6046db17dbd424626cb46fce1ee3dde185112ffe69f0f0aeeb9155322da8147"
   solver-name = "gps-cdcl"
   solver-version = 1
